@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Container Details</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      background:#f4f6f8;
+    }
+    .page {
+      max-width: 1000px;
+      margin: 30px auto;
+    }
+    .card {
+      background:white;
+      border-radius:12px;
+      padding:20px;
+      margin-bottom:20px;
+      box-shadow:0 8px 20px rgba(0,0,0,.06);
+    }
+    .header-row {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .badge {
+      padding:6px 12px;
+      border-radius:20px;
+      font-size:13px;
+      font-weight:bold;
+    }
+    .running { background:#dcfce7; color:#166534; }
+    .exited { background:#fee2e2; color:#991b1b; }
+    .grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+    .stat {
+      font-size:18px;
+      font-weight:bold;
+    }
+    .log-box {
+      background:#0f172a;
+      color:#22c55e;
+      padding:15px;
+      border-radius:10px;
+      height:320px;
+      overflow:auto;
+      font-size:12px;
+    }
+    .actions {
+      display:flex;
+      gap:10px;
+      margin-top:15px;
+    }
+    .btn {
+      padding:10px 16px;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+    .btn.start { background:#22c55e; color:white; }
+    .btn.stop { background:#f59e0b; color:white; }
+    .btn.delete { background:#ef4444; color:white; }
+    a.back {
+      text-decoration:none;
+      font-weight:bold;
+      color:#3b82f6;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🐳 Container Details</h1>
+  <a class="back" href="{{ url_for('index') }}">⬅ Back to dashboard</a>
+</header>
+
+<div class="page">
+
+  <!-- HEADER CARD -->
+  <div class="card header-row">
+    <div>
+      <h2>{{ container.name }}</h2>
+      <p><b>Image:</b> {{ container.image }}</p>
+    </div>
+    <span class="badge {{ container.status }}">
+      {{ container.status|upper }}
+    </span>
+  </div>
+
+  <!-- INFO GRID -->
+  <div class="grid">
+    <div class="card">
+      <h3>📦 Container Info</h3>
+      <ul>
+        <li><b>ID:</b> {{ container.id }}</li>
+        <li><b>Created:</b> {{ container.created }}</li>
+        <li><b>Command:</b> {{ container.command }}</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>🌐 Networking</h3>
+      <ul>
+        {% for p in container.ports %}
+          <li>{{ p }}</li>
+        {% else %}
+          <li>No ports exposed</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- VOLUMES -->
+  <div class="card">
+    <h3>💾 Volumes</h3>
+    <ul>
+      {% for m in container.mounts %}
+        <li>{{ m.Source }} → {{ m.Destination }}</li>
+      {% else %}
+        <li>No volumes</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- RESOURCES -->
+  <div class="card">
+    <h3>📊 Resources (Live)</h3>
+    <div class="grid">
+      <div>
+        🧠 CPU
+        <div class="stat"><span id="cpu">0</span> %</div>
+      </div>
+      <div>
+        💾 Memory
+        <div class="stat"><span id="mem">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGS -->
+  <div class="card">
+    <h3>📜 Logs (Live)</h3>
+    <pre id="logs-box" class="log-box"></pre>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="card actions">
+    <form method="post" action="/containers/{{ container.name }}/start">
+      <button class="btn start">▶ Start</button>
+    </form>
+    <form method="post" action="/containers/{{ container.name }}/stop">
+      <button class="btn stop">⏸ Stop</button>
+    </form>
+    <form method="post" action="/containers/{{ container.name }}/delete">
+      <button class="btn delete">🗑 Delete</button>
+    </form>
+  </div>
+
+</div>
+
+<script>
+function loadLogs() {
+  fetch("/containers/{{ container.name }}/logs")
+    .then(r => r.json())
+    .then(d => document.getElementById("logs-box").textContent = d.logs);
+}
+function loadStats() {
+  fetch("/containers/{{ container.name }}/stats")
+    .then(r => r.json())
+    .then(d => {
+      document.getElementById("cpu").textContent = d.cpu;
+      document.getElementById("mem").textContent =
+        d.mem_usage + " MB / " + d.mem_limit + " MB";
+    });
+}
+setInterval(loadLogs, 3000);
+setInterval(loadStats, 2000);
+loadLogs();
+loadStats();
+</script>
+
+</body>
+</html>

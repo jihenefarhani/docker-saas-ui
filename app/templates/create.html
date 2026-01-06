@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Container</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='create.css') }}">
+  <style>
+    body {
+      background:#f4f6f8;
+    }
+    .page {
+      max-width: 600px;
+      margin: 40px auto;
+    }
+    .card {
+      background:white;
+      padding:25px;
+      border-radius:12px;
+      box-shadow:0 8px 20px rgba(0,0,0,.06);
+    }
+    .card h2 {
+      margin-top:0;
+    }
+    .form-group {
+      margin-bottom:15px;
+    }
+    label {
+      display:block;
+      font-weight:bold;
+      margin-bottom:5px;
+    }
+    input, textarea, select {
+      width:100%;
+      padding:10px;
+      border-radius:8px;
+      border:1px solid #d1d5db;
+      font-size:14px;
+    }
+    textarea {
+      resize:vertical;
+    }
+    .hint {
+      font-size:12px;
+      color:#6b7280;
+      margin-top:4px;
+    }
+    .btn {
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:10px;
+      font-size:15px;
+      font-weight:bold;
+      cursor:pointer;
+      background:#2563eb;
+      color:white;
+      margin-top:10px;
+    }
+    .back {
+      display:inline-block;
+      margin-bottom:15px;
+      color:#2563eb;
+      text-decoration:none;
+      font-weight:bold;
+    }
+    .section {
+      background:#f9fafb;
+      padding:15px;
+      border-radius:10px;
+      margin-top:15px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🐳 Docker SAAS UI</h1>
+</header>
+
+<div class="page">
+
+  <a class="back" href="{{ url_for('index') }}">⬅ Back to dashboard</a>
+
+  <div class="card">
+    <h2>Create New Container</h2>
+    <p class="hint">
+      Deploy a containerized application with one click.
+    </p>
+
+    <form method="post">
+
+      <div class="form-group">
+        <label>Container name</label>
+        <input type="text" name="name" placeholder="my-app" required>
+      </div>
+
+      <div class="form-group">
+        <label>Host port</label>
+        <input type="number" name="host_port" placeholder="8080" required>
+        <div class="hint">External port exposed on the host</div>
+      </div>
+
+      <div class="form-group">
+        <label>Application type</label>
+        <select name="image" id="imageSelect" onchange="toggleNginxFields()" required>
+          <option value="nginx:alpine">Nginx (Static Website)</option>
+          <option value="data-web:latest">Data Web Application</option>
+          <option value="devops-web:latest">DevOps Web Application</option>
+          <option value="grafana/grafana">Grafana</option>
+          <option value="jenkins/jenkins:lts">Jenkins</option>
+          <option value="adminer">Adminer</option>
+        </select>
+      </div>
+
+      <!-- NGINX ONLY -->
+      <div id="nginxFields" class="section">
+        <h4>📝 Nginx Page Content</h4>
+
+        <div class="form-group">
+          <label>Page title</label>
+          <input type="text" name="title" placeholder="Welcome to my site">
+        </div>
+
+        <div class="form-group">
+          <label>Page content</label>
+          <textarea name="body" rows="4"
+            placeholder="This is a custom Nginx page"></textarea>
+        </div>
+      </div>
+
+      <button class="btn" type="submit">
+        🚀 Create & Start Container
+      </button>
+
+    </form>
+  </div>
+
+</div>
+
+<script>
+function toggleNginxFields() {
+  const image = document.getElementById("imageSelect").value;
+  const nginxFields = document.getElementById("nginxFields");
+
+  if (image === "nginx:alpine") {
+    nginxFields.style.display = "block";
+  } else {
+    nginxFields.style.display = "none";
+  }
+}
+toggleNginxFields();
+</script>
+
+</body>
+</html>

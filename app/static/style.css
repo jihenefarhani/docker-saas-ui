@@ -1,0 +1,98 @@
+/* Reset basique */
+* {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+header {
+  background-color: #1f2937;
+  color: white;
+  padding: 16px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+/* Container */
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th {
+  background-color: #374151;
+  color: white;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Status badge */
+.status {
+  padding: 5px 10px;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+}
+
+.running {
+  background-color: #16a34a;
+}
+
+.exited {
+  background-color: #dc2626;
+}
+
+.created {
+  background-color: #6b7280;
+}
+.flash-container {
+  width: 80%;
+  margin: 15px auto;
+}
+
+.flash {
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.flash.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.flash.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.flash.danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}

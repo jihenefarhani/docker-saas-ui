@@ -117,15 +117,15 @@ exit()
 ```bash 
 python app/app.py
 ```
---
+---
 
-##🌐 Accès à l’application
+## 🌐 Accès à l’application
 
 URL : http://localhost:5000
 
---
+---
 
-##📊 Fonctionnalités principales
+## 📊 Fonctionnalités principales
 
 - Authentification sécurisée
 
